@@ -61,9 +61,6 @@ author:
   avatar : "/assets/images/headshot.jpg"
   bio    : "Electrical and Computer Engineering at UT Austin"
   links:
-    - label: "Website"
-      icon: "fas fa-fw fa-link"
-      url: "https://1ramihamada.github.io/"
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin-in"
       url: "https://www.linkedin.com/in/rami-h-91133927a/"
