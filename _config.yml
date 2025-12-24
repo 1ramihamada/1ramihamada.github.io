@@ -61,7 +61,7 @@ plugins:
 author:
   name   : "Rami Hamada"
   avatar : "/assets/images/headshot.jpg"
-  bio    : "My awesome biography constrained to a sentence or two goes here."
+  bio    : "Electrical and Computer Engineering at UT Austin"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"
@@ -69,21 +69,24 @@ author:
     - label: "LinkedIn"
       icon: "fas fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/rami-h-91133927a/"
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope"
+      url: "mailto:rhamada@utexas.edu"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/1ramihamada"
 
-footer:
-  links:
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+#footer:
+#  links:
+#    - label: "Twitter"
+#      icon: "fab fa-fw fa-twitter-square"
+#      url: "https://twitter.com/"
+#    - label: "GitHub"
+#      icon: "fab fa-fw fa-github"
+#      url: "https://github.com/"
+#    - label: "Instagram"
+#      icon: "fab fa-fw fa-instagram"
+#      url: "https://instagram.com/"
 
 defaults:
   # _posts
