@@ -2,6 +2,7 @@ main:
   - title: "Projects"
     url: /projects/
   - title: "Resume"
-    url: /resume/
+    url: /assets/resume/Rami_Hamada_Resume.pdf
+    target: "_blank"
   - title: "About"
     url: /about/
