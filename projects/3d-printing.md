@@ -7,13 +7,19 @@ classes: wide
 ---
 
 ## Overview
-This project focused on building the software and control infrastructure required to fabricate stretchable, liquid metal strain sensors using a modified 3D printing platform. Gallium behaves very differently from standard thermoplastics, making reliable deposition difficult without tight coordination between motion control, extrusion pressure, and timing.
+This project involved building the software and control infrastructure needed to fabricate stretchable, liquid metal strain sensors using a modified 3D printing platform.
 
 While the mechanical modifications to the Prusa i3 MK3S+ were handled separately, I was responsible for the entire software stack. This included the ROS2 control architecture, printer–dispenser coordination, GUI development, firmware modifications, and calibration tools that enable repeatable liquid metal deposition using a Nordson Ultimus V air dispenser.
 
 <figure class="align-center">
   <img src="/assets/images/system_diagram.png" alt="Physical system overview" style="max-width: 900px; width: 100%;">
 </figure>
+
+**My Contributions**
+- Designed the ROS2-based control architecture
+- Implemented printer–dispenser synchronization
+- Built the wxPython GUI and calibration tools
+- Modified firmware for liquid metal deposition
 
 ## System Architecture
 I designed the control system around ROS2 to separate printer motion, pneumatic control, and user interaction into independent nodes. This decoupling keeps the printer’s G-code stream fast and stable while allowing extrusion parameters to be adjusted in real time.
@@ -62,6 +68,24 @@ To achieve repeatable deposition, I calibrated the interaction between printer m
 These calibrations enabled consistent, high-precision deposition suitable for research-scale sensor fabrication.
 
 <figure class="align-center">
-  <img src="/assets/images/sensor_samples.png" alt="Printed liquid metal strain sensors" style="max-width: 900px; width: 100%;">
+  <img src="/assets/images/sample_sensor.png" alt="Liquid metal pressure sweep test" style="max-width: 900px; width: 100%;">
+  <figcaption>
+    Pressure sweep showing six gallium prints deposited at a fixed feed rate (12000) and Z height (15 mm).
+    Pressure was increased from 1.2 bar to 1.7 bar in 0.1 bar increments to evaluate trace continuity and pooling behavior.
+  </figcaption>
 </figure>
 
+## Sensor Fabrication Workflow
+With reliable, repeatable liquid metal deposition established, the system enabled a new fabrication workflow for stretchable strain sensors that avoids the limitations of mold-based gallium injection.
+
+The process begins by pouring liquid silicone into a base mold and compressing it with a flat lid press to produce a level surface. Surface flatness is critical, as uneven silicone leads to inconsistent liquid metal traces.
+
+After curing, the lid is removed and gallium is printed directly onto the silicone surface in the desired sensor geometry. The mold is then placed in a freezer to solidify the gallium and preserve the printed pattern.
+
+Once solidified, a second layer of mixed silicone is poured over the gallium and allowed to cure, encapsulating the conductive traces and completing the stretchable sensor.
+
+This approach replaces an earlier method that required fabricating a dedicated mold for each gallium geometry. Mold-based injection was slow and difficult to scale to complex designs. Directly printing gallium onto a prepared silicone substrate enables faster iteration, lower cost, and the ability to fabricate complex sensor geometries without custom tooling.
+
+<figure class="align-center">
+  <img src="/assets/images/completed_sensor.png" alt="Completed liquid metal sensor" style="max-width: 900px; width: 100%;">
+</figure>
