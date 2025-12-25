@@ -71,9 +71,7 @@ To achieve repeatable deposition, I calibrated the interaction between printer m
 ## Sensor Fabrication Workflow
 With repeatable liquid metal deposition established, the system enabled a layered fabrication process for stretchable strain sensors without requiring a dedicated mold for each geometry.
 
-Liquid silicone was poured into a base mold and compressed with a flat lid press to produce a level surface. After curing, gallium was printed directly onto the silicone in the desired sensor geometry.
-
-The mold was then placed in a freezer to solidify the gallium before a second layer of silicone was poured on top to encapsulate the conductive traces and complete the sensor.
+Liquid silicone was poured into a base mold and flattened using a lid press. After curing, gallium was printed directly onto the silicone, solidified in a freezer, and encapsulated with a second silicone layer to complete the sensor.
 
 This approach replaces an earlier mold-based injection method that was slow and difficult to scale to complex designs. Direct printing enables faster iteration, lower cost, and fabrication of complex sensor geometries without custom tooling.
 
