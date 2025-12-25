@@ -32,7 +32,7 @@ I designed the control system around ROS2 to separate printer motion, pneumatic 
 </figure>
 
 ## Software Control & GUI
-I developed a **wxPython-based GUI** that serves as the control layer for the ROS2 system. Running the GUI as its own node keeps the interface responsive during long print jobs and allows manual interaction without interrupting the printer’s motion buffer.
+I developed a wxPython-based GUI that serves as the control layer for the ROS2 system. Running the GUI as its own node keeps the interface responsive during long print jobs and allows manual interaction without interrupting the printer’s motion buffer.
 
 The interface provides four core functions:
 - **Manual Control:** Jogging axes, homing, and sending raw G-code, with dedicated controls to prime and clear the Nordson dispenser.
