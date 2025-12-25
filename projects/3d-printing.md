@@ -7,63 +7,59 @@ classes: wide
 ---
 
 ## Overview
-The platform is built on a modified **Prusa i3 MK3S+**, where the standard filament extruder was removed and replaced with a syringe-based toolhead connected to a **Nordson Ultimus V high-precision air dispenser**. This configuration allows controlled deposition of gallium-based liquid metal for fabricating conductive strain sensors.
+This project focused on building the software and control infrastructure required to fabricate stretchable, liquid metal strain sensors using a modified 3D printing platform. Gallium-based materials behave very differently from standard thermoplastics, which makes reliable deposition difficult without tight coordination between motion control, extrusion pressure, and system timing.
+
+While the mechanical modifications to the **Prusa i3 MK3S+** and syringe-based extrusion hardware were handled separately, I was responsible for the **entire software stack**. This included developing the ROS2 control architecture, implementing printer–dispenser coordination, building the GUI, modifying firmware behavior, and creating calibration and registration tools to support repeatable sensor fabrication. The resulting system enables controlled deposition of liquid metal using a **Nordson Ultimus V high-precision air dispenser**, while maintaining the printer’s positional accuracy and reliability.
 
 <figure class="align-center">
   <img src="/assets/images/system_diagram.png" alt="Physical system overview" style="max-width: 900px; width: 100%;">
 </figure>
 
 ## System Architecture
-Printer motion, pneumatic control, and user interaction are handled as separate components using **ROS2**. By decoupling motion execution from extrusion control, the system maintains a high-speed G-code stream while allowing real-time adjustment of extrusion parameters. This architecture keeps deposition stable even when printing inside custom molds or on non-standard substrates.
+I designed the control system around **ROS2** to separate printer motion, pneumatic control, and user interaction into independent nodes. This decoupling keeps the printer’s G-code stream fast and stable while allowing extrusion parameters to be adjusted in real time.
 
-Each major function operates as a separate ROS2 node:
+- **Printer Node:** Streams G-code to the Prusa and handles motion execution and mold-aligned coordinate transforms. It also issues start/stop triggers to synchronize extrusion with movement.
+- **Dispenser Node:** Converts ROS commands into serial messages for the Nordson Ultimus V, using a dedicated worker loop to minimize pressure timing jitter.
+- **GUI Node:** Provides real-time control for jogging, registration, and parameter tuning without interrupting the printer’s serial buffer.
 
-- **Printer Node:** Serves as the hardware interface for the Prusa MK3S+. It handles G-code streaming, motion execution, and spatial transformations required for printing within custom molds. During path execution, it publishes start/stop triggers to the dispenser topic to synchronize extrusion with physical motion.
-- **Dispenser Node:** Translates ROS messages into the serial command protocol used by the Nordson Ultimus V. It runs a dedicated worker loop to ensure pneumatic pulses are issued with minimal jitter.
-- **GUI Node:** Provides the operator interface for manual jogging, coordinate registration, and real-time parameter tuning. Extrusion pressure and vacuum settings can be adjusted mid-print without interrupting the printer’s serial buffer.
-
-Inter-node communication is handled through asynchronous ROS2 topics and services. The Printer Node acts as the primary coordinator during path execution, issuing commands to the Dispenser Node via the `/dispenser/cmd` topic. This architecture isolates time-critical deposition control from printer motion, allowing precise liquid metal extrusion while preserving the printer’s standard motion profile.
+The Printer Node acts as the coordinator during execution, communicating with the Dispenser Node over ROS2 topics to isolate time-critical deposition control from motion planning.
 
 <figure class="align-center">
   <img src="/assets/images/ros_diagram.png" alt="ROS2 system architecture diagram" style="max-width: 900px; width: 100%;">
 </figure>
 
 ## Software Control & GUI
-The software interface was developed using **wxPython** and serves as the central control hub for the ROS2 system. The GUI runs as its own node, which keeps the interface responsive during long print jobs and allows manual interaction without interrupting the printer’s motion buffer.
+I developed a **wxPython-based GUI** that serves as the control layer for the ROS2 system. Running the GUI as its own node keeps the interface responsive during long print jobs and allows manual interaction without interrupting the printer’s motion buffer.
 
-The interface is organized into four primary control areas:
+The interface provides four core functions:
+- **Manual Control:** Jogging axes, homing, and sending raw G-code, with dedicated controls to prime and clear the Nordson dispenser.
+- **Coordinate Registration:** Recording reference points on a substrate and computing a transform to align digital toolpaths with custom molds.
+- **Live Parameter Tuning:** Adjusting extrusion pressure and vacuum retract settings mid-print to compensate for material behavior.
+- **Path Visualization:** A 3D preview of the loaded G-code to verify toolpaths and offsets before execution.
 
-- **Manual Hardware Interface:** The GUI allows operators to manually jog printer axes, home the system, and send raw G-code commands. A dedicated control is provided for the Nordson dispenser, allowing the liquid metal to be primed and the syringe tip cleared before starting a print.
-- **Coordinate Registration:** To support printing inside custom molds, the GUI includes a registration tool. The operator records three reference corners on the substrate, and the system computes a transformation matrix that aligns the digital toolpath with the physical mold.
-- **Real-Time Parameter Tuning:** Extrusion pressure and vacuum retract settings can be adjusted live during a print. This makes it possible to compensate for changes in material viscosity or surface tension without re-slicing the original G-code.
-- **Path Visualization:** A built-in matplotlib visualization provides a 3D preview of the loaded G-code, allowing the operator to verify the print path and coordinate offsets before committing to a deposition run.
-
-### Data Flow & Monitoring
-The GUI continuously monitors system state through a serial response terminal that displays real-time feedback from the Prusa firmware. Synchronous ROS2 services are used to poll the current nozzle position (`M114`), ensuring the graphical interface remains aligned with the printer’s physical state during manual setup and calibration.
+The GUI also monitors system state through live serial feedback from the printer and uses ROS2 services (e.g., `M114`) to keep the displayed position synchronized with the physical hardware during setup and calibration.
 
 <figure class="align-center">
   <img src="/assets/images/gui.png" alt="User Interface Preview" style="max-width: 900px; width: 100%;">
 </figure>
 
 ## Custom Firmware Modifications
-The stock Prusa firmware was modified to support the non-standard hardware and thermal behavior required for liquid metal printing. Gallium solidifies near room temperature but becomes overly fluid if overheated, so maintaining a narrow temperature range is essential for stable extrusion and consistent trace formation.
+I modified the stock Prusa firmware to support the non-standard hardware and thermal behavior required for liquid metal printing. Because gallium solidifies near room temperature and becomes unstable if overheated, the printer’s default assumptions for thermoplastic extrusion had to be adjusted.
 
-- **Thermal Handling:** The default firmware temperature limits and safety checks were adjusted to allow the use of an external heating element on the syringe-based toolhead. These changes prevented the printer from faulting due to assumptions made for thermoplastic extrusion, while still allowing the liquid metal to remain molten throughout a print.
-- **Kinematic Tuning:** Motion parameters were recalibrated to account for the added mass and inertia of the syringe-based toolhead. Acceleration and jerk settings were reduced to limit mechanical vibrations that would otherwise cause breaks or thinning in conductive traces.
-- **Sensor Calibration:** Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified toolhead geometry. This ensured temperature readings and motion bounds remained consistent with the physical setup.
+- **Thermal Handling:** Firmware temperature limits and safety checks were modified to support an external heating element on the syringe-based toolhead without triggering fault conditions.
+- **Kinematic Tuning:** Acceleration and jerk parameters were reduced to account for the added mass of the syringe toolhead, minimizing vibrations that caused trace breakage.
+- **Sensor Calibration:** Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified toolhead geometry.
 
-These firmware changes provide the mechanical and thermal stability needed for the ROS2 control system to execute precise motion and extrusion commands.
+These changes provided the mechanical and thermal stability required for reliable software-controlled deposition.
 
 ## Calibration and Path Optimization
-Before fabricating functional sensors, a series of calibration routines were used to synchronize the pneumatic dispenser with the printer’s motion system. Gallium-based alloys have high surface tension and low viscosity, which makes them prone to beading or trace breakage when pressure and print speed are not properly matched.
+To achieve repeatable deposition, I calibrated the interaction between printer motion and pneumatic extrusion. Gallium’s high surface tension and low viscosity make it sensitive to mismatches between speed, pressure, and timing.
 
-- **Pressure–Speed Synchronization:** Spiral test patterns were used to evaluate trace continuity under changing motion conditions. Spirals are well suited for this purpose because they involve continuous changes in direction and velocity. By running these patterns at different feed rates and pressures, the optimal pressure settings in the Nordson node were identified to match the Prusa node’s motion profile. This prevented material pooling at corners and discontinuities along straight segments.
+- **Pressure–Speed Matching:** Spiral test patterns were used to tune extrusion pressure against feed rate, preventing pooling at corners and discontinuities along straight paths.
+- **Z-Height Calibration:** A stepped calibration block was used to determine the nozzle offset that maintains a continuous material bridge without dragging or beading.
+- **Start/Stop Timing:** G-code trigger timing and vacuum retract settings were tuned to compensate for pneumatic latency, eliminating tails and blobs at trace endpoints.
 
-- **Nozzle Height (Z Calibration):** Liquid metal deposition is highly sensitive to the gap between the syringe tip and the substrate. If the nozzle is too high, surface tension causes the material to bead into droplets; if it is too low, the tip drags through the deposited trace. A stepped calibration block was used to determine the Z-offset that maintains a continuous bridge of material between the nozzle and the surface.
-
-- **Start/Stop Latency Compensation:** Unlike thermoplastic extrusion, liquid metal exhibits inertia and a short delay between pneumatic actuation and material flow. To compensate for this, G-code trigger timing and vacuum retract parameters in the Nordson node were tuned to eliminate tails and blobs at the ends of conductive paths. This ensured clean starts and stops for individual traces.
-
-Together, these calibration steps enabled the transition from exploratory material testing to the repeatable, high-precision deposition required for research-scale sensor fabrication.
+These calibrations enabled consistent, high-precision deposition suitable for research-scale sensor fabrication.
 
 <figure class="align-center">
   <img src="/assets/images/sensor_samples.png" alt="Printed liquid metal strain sensors" style="max-width: 900px; width: 100%;">
