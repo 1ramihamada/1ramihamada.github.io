@@ -16,20 +16,18 @@ While the mechanical modifications to the Prusa i3 MK3S+ were handled separately
 </figure>
 
 ## System Architecture
-I designed the control system around ROS2 to separate printer motion, pneumatic control, and user interaction into independent nodes. This decoupling keeps the printer’s G-code stream fast and stable while allowing extrusion parameters to be adjusted in real time.
+I designed the control system around ROS2 to separate printer motion, pneumatic control, and user interaction into independent nodes. This decoupling keeps the printer’s G-code stream fast and stable while allowing real-time adjustment of extrusion parameters.
 
 - **Printer Node:** Streams G-code to the Prusa and handles motion execution and mold-aligned coordinate transforms. It also issues start/stop triggers to synchronize extrusion with movement.
 - **Dispenser Node:** Converts ROS commands into serial messages for the Nordson Ultimus V, using a dedicated worker loop to minimize pressure timing jitter.
 - **GUI Node:** Provides real-time control for jogging, registration, and parameter tuning without interrupting the printer’s serial buffer.
-
-The Printer Node acts as the coordinator during execution, communicating with the Dispenser Node over ROS2 topics to isolate time-critical deposition control from motion planning.
 
 <figure class="align-center">
   <img src="/assets/images/ros_diagram.png"
        alt="ROS2 control architecture for liquid metal printing"
        style="max-width: 900px; display: block; margin: 0 auto;">
   <figcaption style="max-width: 900px; margin: 0 auto;">
-    The Printer Node coordinates motion execution and triggers the Dispenser Node via asynchronous ROS2 topics to synchronize extrusion with movement. The GUI Node provides manual overrides, calibration tools, and parameter tuning by communicating with both hardware nodes through dedicated topics and service calls.
+  ROS2 node architecture showing how motion execution, pneumatic control, and the GUI are decoupled and synchronized during printing.
   </figcaption>
 </figure>
 
@@ -80,7 +78,7 @@ These calibrations enabled consistent, high-precision deposition suitable for re
 ## Sensor Fabrication Workflow
 With repeatable liquid metal deposition established, the system enabled a layered fabrication process for stretchable strain sensors without requiring a dedicated mold for each geometry.
 
-Liquid silicone was poured into a base mold and compressed with a flat lid press to produce a level surface, which is critical for consistent deposition. After curing, gallium was printed directly onto the silicone in the desired sensor geometry.
+Liquid silicone was poured into a base mold and compressed with a flat lid press to produce a level surface. After curing, gallium was printed directly onto the silicone in the desired sensor geometry.
 
 The mold was then placed in a freezer to solidify the gallium before a second layer of silicone was poured on top to encapsulate the conductive traces and complete the sensor.
 
@@ -89,3 +87,5 @@ This approach replaces an earlier mold-based injection method that was slow and 
 <figure class="align-center">
   <img src="/assets/images/completed_sensor.png" alt="Completed liquid metal sensor" style="max-width: 900px; width: 100%;">
 </figure>
+
+**Impact:** Enabled rapid, low-cost fabrication of complex liquid metal strain sensors using a software-driven printing workflow.
