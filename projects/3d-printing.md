@@ -13,9 +13,6 @@ The platform is built on a modified **Prusa i3 MK3S+**, where the standard filam
   <img src="/assets/images/system_diagram.png" alt="Physical system overview" style="max-width: 900px; width: 100%;">
 </figure>
 
-
----
-
 ## System Architecture
 Printer motion, pneumatic control, and user interaction are handled as separate components using **ROS2**. By decoupling motion execution from extrusion control, the system maintains a high-speed G-code stream while allowing real-time adjustment of extrusion parameters. This architecture keeps deposition stable even when printing inside custom molds or on non-standard substrates.
 
@@ -30,8 +27,6 @@ Inter-node communication is handled through asynchronous ROS2 topics and service
 <figure class="align-center">
   <img src="/assets/images/ros_diagram.png" alt="ROS2 system architecture diagram" style="max-width: 900px; width: 100%;">
 </figure>
-
----
 
 ## Software Control & GUI
 The software interface was developed using **wxPython** and serves as the central control hub for the ROS2 system. The GUI runs as its own node, which keeps the interface responsive during long print jobs and allows manual interaction without interrupting the printer’s motion buffer.
@@ -50,38 +45,23 @@ The GUI continuously monitors system state through a serial response terminal th
   <img src="/assets/images/gui.png" alt="User Interface Preview" style="max-width: 900px; width: 100%;">
 </figure>
 
-
----
-
 ## Custom Firmware Modifications
 The stock Prusa firmware was modified to support the non-standard hardware and thermal behavior required for liquid metal printing. Gallium solidifies near room temperature but becomes overly fluid if overheated, so maintaining a narrow temperature range is essential for stable extrusion and consistent trace formation.
 
-### Thermal Handling
-The default firmware temperature limits and safety checks were adjusted to allow the use of an external heating element on the syringe-based toolhead. These changes prevented the printer from faulting due to assumptions made for thermoplastic extrusion, while still allowing the liquid metal to remain molten throughout a print.
-
-Careful temperature control was necessary to balance material flow and trace definition, since small temperature changes significantly affect gallium viscosity.
-
-### Kinematic Tuning
-Motion parameters were recalibrated to account for the added mass and inertia of the syringe-based toolhead. Acceleration and jerk settings were reduced to limit mechanical vibrations that would otherwise cause breaks or thinning in conductive traces.
-
-### Sensor Calibration
-Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified toolhead geometry. This ensured temperature readings and motion bounds remained consistent with the physical setup.
+- **Thermal Handling:** The default firmware temperature limits and safety checks were adjusted to allow the use of an external heating element on the syringe-based toolhead. These changes prevented the printer from faulting due to assumptions made for thermoplastic extrusion, while still allowing the liquid metal to remain molten throughout a print.
+- **Kinematic Tuning:** Motion parameters were recalibrated to account for the added mass and inertia of the syringe-based toolhead. Acceleration and jerk settings were reduced to limit mechanical vibrations that would otherwise cause breaks or thinning in conductive traces.
+- **Sensor Calibration:** Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified toolhead geometry. This ensured temperature readings and motion bounds remained consistent with the physical setup.
 
 These firmware changes provide the mechanical and thermal stability needed for the ROS2 control system to execute precise motion and extrusion commands.
-
----
 
 ## Calibration and Path Optimization
 Before fabricating functional sensors, a series of calibration routines were used to synchronize the pneumatic dispenser with the printer’s motion system. Gallium-based alloys have high surface tension and low viscosity, which makes them prone to beading or trace breakage when pressure and print speed are not properly matched.
 
-### Pressure–Speed Synchronization
-Spiral test patterns were used to evaluate trace continuity under changing motion conditions. Spirals are well suited for this purpose because they involve continuous changes in direction and velocity. By running these patterns at different feed rates and pressures, the optimal pressure settings in the Nordson node were identified to match the Prusa node’s motion profile. This prevented material pooling at corners and discontinuities along straight segments.
+- **Pressure–Speed Synchronization:** Spiral test patterns were used to evaluate trace continuity under changing motion conditions. Spirals are well suited for this purpose because they involve continuous changes in direction and velocity. By running these patterns at different feed rates and pressures, the optimal pressure settings in the Nordson node were identified to match the Prusa node’s motion profile. This prevented material pooling at corners and discontinuities along straight segments.
 
-### Nozzle Height (Z Calibration)
-Liquid metal deposition is highly sensitive to the gap between the syringe tip and the substrate. If the nozzle is too high, surface tension causes the material to bead into droplets; if it is too low, the tip drags through the deposited trace. A stepped calibration block was used to determine the Z-offset that maintains a continuous bridge of material between the nozzle and the surface.
+- **Nozzle Height (Z Calibration):** Liquid metal deposition is highly sensitive to the gap between the syringe tip and the substrate. If the nozzle is too high, surface tension causes the material to bead into droplets; if it is too low, the tip drags through the deposited trace. A stepped calibration block was used to determine the Z-offset that maintains a continuous bridge of material between the nozzle and the surface.
 
-### Start/Stop Latency Compensation
-Unlike thermoplastic extrusion, liquid metal exhibits inertia and a short delay between pneumatic actuation and material flow. To compensate for this, G-code trigger timing and vacuum retract parameters in the Nordson node were tuned to eliminate tails and blobs at the ends of conductive paths. This ensured clean starts and stops for individual traces.
+- **Start/Stop Latency Compensation:** Unlike thermoplastic extrusion, liquid metal exhibits inertia and a short delay between pneumatic actuation and material flow. To compensate for this, G-code trigger timing and vacuum retract parameters in the Nordson node were tuned to eliminate tails and blobs at the ends of conductive paths. This ensured clean starts and stops for individual traces.
 
 Together, these calibration steps enabled the transition from exploratory material testing to the repeatable, high-precision deposition required for research-scale sensor fabrication.
 
