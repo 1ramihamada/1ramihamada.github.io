@@ -47,11 +47,9 @@ The interface provides four core functions:
 ## Custom Firmware Modifications
 I modified the stock Prusa firmware to support the non-standard hardware and thermal behavior required for liquid metal printing. Because gallium solidifies near room temperature and becomes unstable if overheated, the printer’s default assumptions for thermoplastic extrusion had to be adjusted.
 
-- **Thermal Handling:** Firmware temperature limits and safety checks were modified to support an external heating element on the syringe-based toolhead without triggering fault conditions.
-- **Kinematic Tuning:** Acceleration and jerk parameters were reduced to account for the added mass of the syringe toolhead, minimizing vibrations that caused trace breakage.
-- **Sensor Calibration:** Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified toolhead geometry.
-
-These changes provided the mechanical and thermal stability required for reliable software-controlled deposition.
+- **Thermal Handling:** Firmware temperature limits and safety checks were modified to support an external heating element on the syringe body without triggering fault conditions.
+- **Kinematic Tuning:** Acceleration and jerk parameters were reduced to account for the added mass of the syringe assembly, minimizing vibrations that caused trace breakage.
+- **Sensor Calibration:** Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified extruder geometry.
 
 ## Calibration and Path Optimization
 To achieve repeatable deposition, I calibrated the interaction between printer motion and pneumatic extrusion. Gallium’s high surface tension and low viscosity make it sensitive to mismatches between speed, pressure, and timing.
@@ -59,8 +57,6 @@ To achieve repeatable deposition, I calibrated the interaction between printer m
 - **Pressure–Speed Matching:** Spiral test patterns were used to tune extrusion pressure against feed rate, preventing pooling at corners and discontinuities along straight paths.
 - **Z-Height Calibration:** A stepped calibration block was used to determine the nozzle offset that maintains a continuous material bridge without dragging or beading.
 - **Start/Stop Timing:** G-code trigger timing and vacuum retract settings were tuned to compensate for pneumatic latency, eliminating tails and blobs at trace endpoints.
-
-These calibrations enabled consistent, high-precision deposition suitable for research-scale sensor fabrication.
 
 <figure class="align-center">
   <img src="/assets/images/sensor_samples.png"
@@ -71,7 +67,6 @@ These calibrations enabled consistent, high-precision deposition suitable for re
     Pressure was increased from 1.2 bar to 1.7 bar in 0.1 bar increments to evaluate trace continuity and pooling behavior.
   </figcaption>
 </figure>
-
 
 ## Sensor Fabrication Workflow
 With repeatable liquid metal deposition established, the system enabled a layered fabrication process for stretchable strain sensors without requiring a dedicated mold for each geometry.
