@@ -1,5 +1,5 @@
 ---
-title: Liquid Metal Sensor Fabrication
+title: Liquid Metal 3D Printer
 permalink: /projects/3d-printing/
 author_profile: true
 layout: single
