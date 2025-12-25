@@ -2,6 +2,8 @@
 title: Liquid Metal Sensor Fabrication
 permalink: /projects/3d-printing/
 author_profile: true
+layout: single
+classes: wide
 ---
 
 ## Overview
