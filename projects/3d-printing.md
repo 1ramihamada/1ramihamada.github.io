@@ -9,7 +9,10 @@ classes: wide
 ## Overview
 The platform is built on a modified **Prusa i3 MK3S+**, where the standard filament extruder was removed and replaced with a syringe-based toolhead connected to a **Nordson Ultimus V high-precision air dispenser**. This configuration allows controlled deposition of gallium-based liquid metal for fabricating conductive strain sensors.
 
-![Physical architecture overview](../assets/images/system_diagram.png)
+<figure class="align-center">
+  <img src="/assets/images/system_diagram.png" alt="Physical system overview" style="max-width: 900px; width: 100%;">
+</figure>
+
 
 ---
 
@@ -24,7 +27,9 @@ Each major function operates as a separate ROS2 node:
 
 Inter-node communication is handled through asynchronous ROS2 topics and services. The Printer Node acts as the primary coordinator during path execution, issuing commands to the Dispenser Node via the `/dispenser/cmd` topic. This architecture isolates time-critical deposition control from printer motion, allowing precise liquid metal extrusion while preserving the printer’s standard motion profile.
 
-![ROS2 system architecture diagram](../assets/images/ros_diagram.png)
+<figure class="align-center">
+  <img src="/assets/images/ros_diagram.png" alt="ROS2 system architecture diagram" style="max-width: 900px; width: 100%;">
+</figure>
 
 ---
 
@@ -42,6 +47,11 @@ The interface is organized into four primary control areas:
 The GUI continuously monitors system state through a serial response terminal that displays real-time feedback from the Prusa firmware. Synchronous ROS2 services are used to poll the current nozzle position (`M114`), ensuring the graphical interface remains aligned with the printer’s physical state during manual setup and calibration.
 
 ![User Interface Preview](../assets/images/gui.png)
+
+<figure class="align-center">
+  <img src="/assets/images/gui.png" alt="User Interface Preview" style="max-width: 900px; width: 100%;">
+</figure>
+
 
 ---
 
@@ -77,4 +87,6 @@ Unlike thermoplastic extrusion, liquid metal exhibits inertia and a short delay 
 
 Together, these calibration steps enabled the transition from exploratory material testing to the repeatable, high-precision deposition required for research-scale sensor fabrication.
 
-![Printed liquid metal strain sensors](../assets/images/sensor_samples.png)
+<figure class="align-center">
+  <img src="/assets/images/sensor_samples.png" alt="Printed liquid metal strain sensors" style="max-width: 900px; width: 100%;">
+</figure>
