@@ -7,9 +7,9 @@ classes: wide
 ---
 
 ## Overview
-This project focused on building the software and control infrastructure required to fabricate stretchable, liquid metal strain sensors using a modified 3D printing platform. Gallium-based materials behave very differently from standard thermoplastics, which makes reliable deposition difficult without tight coordination between motion control, extrusion pressure, and system timing.
+This project focused on building the software and control infrastructure required to fabricate stretchable, liquid metal strain sensors using a modified 3D printing platform. Gallium behaves very differently from standard thermoplastics, making reliable deposition difficult without tight coordination between motion control, extrusion pressure, and timing.
 
-While the mechanical modifications to the **Prusa i3 MK3S+** and syringe-based extrusion hardware were handled separately, I was responsible for the **entire software stack**. This included developing the ROS2 control architecture, implementing printer–dispenser coordination, building the GUI, modifying firmware behavior, and creating calibration and registration tools to support repeatable sensor fabrication. The resulting system enables controlled deposition of liquid metal using a **Nordson Ultimus V high-precision air dispenser**, while maintaining the printer’s positional accuracy and reliability.
+While the mechanical modifications to the **Prusa i3 MK3S+** were handled separately, I was responsible for the **entire software stack**. This included the ROS2 control architecture, printer–dispenser coordination, GUI development, firmware modifications, and calibration tools that enable repeatable liquid metal deposition using a **Nordson Ultimus V air dispenser**.
 
 <figure class="align-center">
   <img src="/assets/images/system_diagram.png" alt="Physical system overview" style="max-width: 900px; width: 100%;">
@@ -64,3 +64,6 @@ These calibrations enabled consistent, high-precision deposition suitable for re
 <figure class="align-center">
   <img src="/assets/images/sensor_samples.png" alt="Printed liquid metal strain sensors" style="max-width: 900px; width: 100%;">
 </figure>
+
+**Impact:** Enabled repeatable fabrication of liquid metal strain sensors using a software-driven, mold-aligned printing workflow.
+
