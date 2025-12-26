@@ -43,7 +43,9 @@ The interface provides four core functions:
 - **Path Visualization:** A 3D preview of the loaded G-code to verify print paths and coordinate offsets before execution.
 
 <figure class="align-center">
-  <img src="/assets/images/gui.png" alt="User Interface Preview" style="max-width: 900px; width: 100%;">
+  <img src="/assets/images/gui.png" 
+       alt="User Interface Preview" 
+       style="max-width: 900px; display: block; margin: 0 auto;">
 </figure>
 
 ## Custom Firmware Modifications
