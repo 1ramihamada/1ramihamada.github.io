@@ -7,9 +7,9 @@ classes: wide
 ---
 
 ## Overview
-This project developed a software-controlled framework for robotic colonoscopy aimed at reducing operator fatigue during manual endoscope procedures. The system enables teleoperated control of a colonoscope through a robotic platform with four motorized degrees of freedom.
+This project focused on developing a software-controlled framework for robotic colonoscopy aimed at reducing operator fatigue during manual endoscope procedures. The system enables teleoperated control of a colonoscope through a robotic platform with four motorized degrees of freedom.
 
-My contributions focused on the software side: teleoperation control, sensing integration, and the operator interface. I implemented game-controller-based control, integrated live video from a miniature end-effector camera, added magnetic localization using an NDI Aurora tracker, and integrated a pre-trained vision model to assist with tumor detection during navigation.
+My contributions were on the software side, including teleoperation control, sensing integration, and the operator interface. I implemented game-controller-based control, integrated live video from a miniature end-effector camera, added magnetic localization using an NDI Aurora tracker, and supported the integration of a pre-trained vision model to assist with tumor detection during navigation.
 
 <figure class="align-center">
   <img src="/assets/images/colon_setup.png"
@@ -30,12 +30,16 @@ My contributions focused on the software side: teleoperation control, sensing in
 </figure>
 
 ## Control & Teleoperation
-I implemented a 4-DOF control system in Python on a Jetson Nano, using a wired Xbox 360 controller for teleoperation. Controller inputs were mapped to the robot’s degrees of freedom to support smooth, continuous navigation control.
+I implemented a 4-DOF control system in Python running on a Jetson Nano, using a wired Xbox 360 controller for teleoperation. Controller inputs were mapped to the robot’s degrees of freedom to provide smooth, continuous control during navigation.
 
-Motor commands were issued through the Dynamixel SDK, with ROS used as middleware to connect control, sensing, and visualization. For remote testing, the system was connected using Tailscale and validated through long-distance operation with minimal perceived delay.
+Motor commands were issued through the Dynamixel SDK, with ROS used as middleware to connect control, sensing, and visualization components. For remote testing, the system was connected using Tailscale and validated through long-distance operation with minimal perceived delay.
 
 ## Sensing & Localization
-I integrated NDI Aurora magnetic tracking to estimate the position and orientation of the colonoscope tip during navigation. Tracking data was acquired in real time and recorded during maneuvering, then used alongside the video feed to provide spatial context during experiments.
+I integrated NDI Aurora magnetic tracking using NDI’s API to estimate the position and orientation of the colonoscope tip during navigation. Tracking data was acquired in real time and recorded during maneuvering, then used alongside the live video feed to provide spatial context during experiments.
 
 ## Vision Integration
-I streamed live video from the end-effector camera into the operator interface and integrated a pre-trained vision model for real-time tumor detection. Detection results were overlaid on the video stream so the operator could see flagged regions without switching views.
+Live video from the end-effector camera was streamed into the operator interface using ROS to support navigation and situational awareness during teleoperation.
+
+A pre-trained vision model developed by a collaborating researcher was connected to the video pipeline, allowing tumor detection results to be displayed alongside the live feed. My contribution focused on integrating the camera stream and visualization so detection outputs could be viewed during navigation without switching interfaces.
+
+
