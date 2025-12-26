@@ -12,7 +12,9 @@ This project involved building the software and control infrastructure needed to
 While the mechanical modifications to the printer were handled separately, I was responsible for the entire software stack. This included the ROS2 control architecture, printer–dispenser coordination, GUI development, firmware modifications, and calibration tools for repeatable liquid metal deposition.
 
 <figure class="align-center">
-  <img src="/assets/images/system_diagram.png" alt="Physical system overview" style="max-width: 900px; width: 100%;">
+  <img src="/assets/images/system_diagram.png" 
+       alt="Physical system overview" 
+       style="max-width: 900px; display: block; margin: 0 auto;">
 </figure>
 
 ## System Architecture
@@ -24,7 +26,7 @@ I designed the control system around ROS2 to separate printer motion, pneumatic 
 
 <figure class="align-center">
   <img src="/assets/images/ros_diagram.png"
-       alt="ROS2 control architecture for liquid metal printing"
+       alt="ROS2 control architecture"
        style="max-width: 800px; display: block; margin: 0 auto;">
   <figcaption style="max-width: 800px; margin: 0 auto;">
   ROS2 node architecture showing how motion execution, pneumatic control, and the GUI are decoupled and synchronized during printing.
