@@ -39,6 +39,3 @@ I integrated NDI Aurora magnetic tracking to estimate the position and orientati
 
 ## Vision Integration
 I streamed live video from the end-effector camera into the operator interface and integrated a pre-trained vision model for real-time tumor detection. Detection results were overlaid on the video stream so the operator could see flagged regions without switching views.
-
-## Impact
-This project contributed to the development of a research platform for studying teleoperated colonoscopy with integrated sensing and perception. My work supported experimental evaluation of control interfaces, localization methods, and real-time vision assistance in a medical robotics context.
