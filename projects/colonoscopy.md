@@ -32,7 +32,7 @@ My contributions focused on the software side: teleoperation control, sensing in
 ## Control & Teleoperation
 I implemented a 4-DOF control system in Python on a Jetson Nano, using a wired Xbox 360 controller for teleoperation. Controller inputs were mapped to the robot’s degrees of freedom to support smooth, continuous navigation control.
 
-Motor commands were issued through the Dynamixel SDK, with ROS used as middleware to connect control, sensing, and visualization. For remote testing, the system was connected using Tailscale and validated through long-distance operation (including control from India) with minimal perceived delay (about 1–2 seconds).
+Motor commands were issued through the Dynamixel SDK, with ROS used as middleware to connect control, sensing, and visualization. For remote testing, the system was connected using Tailscale and validated through long-distance operation with minimal perceived delay.
 
 ## Sensing & Localization
 I integrated NDI Aurora magnetic tracking to estimate the position and orientation of the colonoscope tip during navigation. Tracking data was acquired in real time and recorded during maneuvering, then used alongside the video feed to provide spatial context during experiments.
