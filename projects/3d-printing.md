@@ -79,6 +79,16 @@ This approach replaces an earlier mold-based injection method that was slow and 
   <img src="/assets/images/completed_sensor.png" alt="Completed liquid metal sensor" style="max-width: 500px; width: 100%;">
 </figure>
 
+<figure class="align-center">
+  <img src="/assets/images/completed_sensor.png"
+       alt="Completed liquid metal sensor"
+       style="max-width: 500px; display: block; margin: 0 auto;">
+  <figcaption style="max-width: 500px; margin: 0 auto;">
+    Completed sensor
+  </figcaption>
+</figure>
+
+
 ## Experimental Testing & Data Collection
 I designed and implemented the software used to automate experimental testing and data collection for liquid metal strain sensor characterization. This included controlling the vertical motion mechanism, synchronizing force measurements, and recording electrical responses during loading and unloading cycles.
 
