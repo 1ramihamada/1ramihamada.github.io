@@ -7,76 +7,47 @@ classes: wide
 ---
 
 ## Overview
-This project focused on developing the software and control systems for a teleoperated colonoscopy robot designed for precise navigation and real-time sensing. The goal was to enable responsive human-in-the-loop control while integrating multiple sensing modalities into a single operator interface.
+This project involved developing and integrating software components for a teleoperated colonoscopy research platform. The system was used to study navigation, sensing, and operator interaction during controlled experimental trials.
 
-I was responsible for the control software, sensing integration, and teleoperation framework. This included implementing a multi-degree-of-freedom control system, integrating magnetic tracking and vision-based sensing, and building a real-time GUI for navigation and feedback.
+My contributions focused on control software, sensing integration, and operator interfaces. This included implementing multi-degree-of-freedom control using a game controller, integrating magnetic tracking and vision data, and supporting real-time teleoperation and visualization.
 
 <figure class="align-center">
-  <img src="/assets/images/colonoscopy_system.png" alt="Colonoscopy robot system overview"
+  <img src="/assets/images/colon_setup.png"
+       alt="Experimental colonoscopy robot setup"
        style="max-width: 900px; display: block; margin: 0 auto;">
-</figure>
-
-## Control System Architecture
-I implemented a **4-DOF teleoperation control system** running on an NVIDIA Jetson Nano. The control stack maps operator inputs to robot motion while maintaining responsive, stable behavior suitable for real-time navigation.
-
-An Xbox controller was used as the primary input device. Custom input mappings were designed to provide intuitive control over articulation and insertion, allowing the operator to smoothly command multiple degrees of freedom without mode switching.
-
-- **Embedded Controller:** Jetson Nano running the control stack and device interfaces  
-- **Input Mapping:** Low-latency Xbox controller input translated into continuous robot motion commands  
-- **Actuation Control:** Real-time motor command generation for multi-axis control  
-
-<figure class="align-center">
-  <img src="/assets/images/control_architecture.png" alt="Control system architecture"
-       style="max-width: 800px; display: block; margin: 0 auto;">
-  <figcaption style="max-width: 800px; margin: 0 auto;">
-    Embedded control architecture showing operator input mapped to real-time robot actuation.
+  <figcaption style="max-width: 900px; margin: 0 auto;">
+    <strong>Fig. 10.</strong> Experimental setup used for performing the case study, including:
+    ① CH gripping mechanism on a rotary stand,
+    ② passive rotary stand,
+    ③ PENTAX EC-3840LK colonoscope,
+    ④ internal tube monitoring for marker detection,
+    ⑤ NDI Aurora magnetic tracker,
+    ⑥ feeder mechanism,
+    ⑦ Xbox 360 joystick controller,
+    ⑧ U-shaped tube with internal markers,
+    and ⑨ end-effector camera (MISUMI XD-VB164A03LH-120).
   </figcaption>
 </figure>
 
-## Teleoperation & Remote Connectivity
-To support remote operation, I implemented a **secure, low-latency teleoperation framework** using Tailscale. This allowed the robot to be safely controlled across networks without exposing open ports or requiring complex firewall configuration.
+## Control & Teleoperation
+I wrote a 4-DOF control code in python running on a jetson nano, allowing an operator to teleoperate the system using an Xbox controller. The input mapping was designed to provide smooth, continuous control over articulation and motion during navigation tasks.
 
-The system was tested under global network conditions to validate responsiveness and stability. Control latency remained low enough to support real-time teleoperation, enabling the operator to interact with the robot as if it were locally connected.
-
-- Encrypted peer-to-peer communication  
-- Stable control under wide-area network conditions  
-- No reliance on public IP exposure  
+This control interface was used during experimental trials to evaluate usability and responsiveness under realistic operating conditions.
 
 ## Sensing & Localization
-The robot integrates **NDI Aurora magnetic tracking** to provide real-time localization of the end-effector within the body. I handled the full software integration of the tracking system, including data acquisition, coordinate handling, and visualization.
+The system integrates **NDI Aurora magnetic tracking** to estimate the position of the colonoscope tip during navigation. I worked on integrating the tracking data into the software stack and making it available for visualization and analysis during experiments.
 
-Tracking data was streamed into the control interface and used to provide continuous 3D position feedback to the operator. This enabled spatial awareness during navigation, even when visual cues were limited.
+This provided spatial context beyond what was available from the onboard camera alone, especially in regions where visual feedback was limited.
 
-- Real-time magnetic tracking acquisition  
-- 3D position estimation and visualization  
-- Synchronization with control and video streams  
+## Vision Integration
+Live video from the end-effector camera was incorporated into the operator interface to support navigation and situational awareness. In addition, a trained vision model was integrated into the software pipeline to perform **real-time tumor detection**, with results displayed alongside the live video feed.
 
-<figure class="align-center">
-  <img src="/assets/images/magnetic_tracking.png" alt="Magnetic tracking visualization"
-       style="max-width: 800px; display: block; margin: 0 auto;">
-</figure>
+This integration allowed sensing and perception outputs to be evaluated in the context of teleoperated navigation.
 
-## Vision Integration & Tumor Detection
-In addition to localization, I integrated a trained vision model into the navigation interface for **real-time tumor detection**. Live video from the onboard camera was processed and displayed alongside tracking and control information.
+## Remote Operation
+To support remote experimentation, the system was configured for **secure, low-latency teleoperation** using Tailscale. This enabled the platform to be controlled across networks without exposing open ports, while maintaining responsiveness suitable for real-time use.
 
-Detection outputs were overlaid directly on the video stream, allowing the operator to identify regions of interest without switching interfaces. This integration demonstrates how perception models can be embedded directly into interactive robotic systems.
-
-- Live video streaming within the GUI  
-- Real-time inference using a trained detection model  
-- Visual overlays integrated into the operator interface  
-
-<figure class="align-center">
-  <img src="/assets/images/vision_gui.png" alt="Navigation GUI with tumor detection overlay"
-       style="max-width: 900px; display: block; margin: 0 auto;">
-</figure>
-
-## Operator Interface
-I developed a unified GUI that combines:
-- Live camera feed  
-- Magnetic tracking visualization  
-- Robot state and control feedback  
-
-The interface was designed to minimize operator cognitive load by presenting all relevant information in a single view. This allowed seamless switching between navigation, sensing, and decision-making during teleoperation.
+The setup was validated during long-distance operation to confirm stability and acceptable control latency.
 
 ## Impact
-This project demonstrates an end-to-end teleoperated robotic system combining real-time control, secure remote operation, and multi-modal sensing. The resulting platform enables responsive navigation, spatial awareness, and vision-assisted decision-making in a medical robotics context.
+This project contributed to the development of a research platform for studying teleoperated colonoscopy with integrated sensing and perception. My work supported experimental evaluation of control interfaces, localization methods, and real-time vision assistance in a medical robotics context.
