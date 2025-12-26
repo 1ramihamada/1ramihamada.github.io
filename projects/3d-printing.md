@@ -45,7 +45,7 @@ The interface provides four core functions:
 <figure class="align-center">
   <img src="/assets/images/gui.png" 
        alt="User Interface Preview" 
-       style="max-width: 900px; display: block; margin: 0 auto;">
+       style="max-width: 1000px; display: block; margin: 0 auto;">
 </figure>
 
 ## Custom Firmware Modifications
@@ -85,7 +85,6 @@ This approach replaces an earlier mold-based injection method that was slow and 
        style="max-width: 500px; display: block; margin: 0 auto;">
 </figure>
 
-
 ## Experimental Testing & Data Collection
 I designed and implemented the software used to automate experimental testing and data collection for liquid metal strain sensor characterization. This included controlling the vertical motion mechanism, synchronizing force measurements, and recording electrical responses during loading and unloading cycles.
 
@@ -101,10 +100,8 @@ These tools enabled controlled, repeatable experiments and supported analysis of
 <figure class="align-center">
   <img src="/assets/images/experimental_setup.png"
        alt="Experimental setup for liquid metal strain characterization"
-       style="max-width: 500px; display: block; margin: 0 auto;">
-  <figcaption style="max-width: 500px; margin: 0 auto;">
+       style="max-width: 600px; display: block; margin: 0 auto;">
+  <figcaption style="max-width: 600px; margin: 0 auto;">
     Experimental setup for characterizing liquid metal strain sensors using a range of test objects with different geometries and surface features.
   </figcaption>
 </figure>
-
-**Impact:** Enabled rapid, low-cost fabrication of complex liquid metal strain sensors using a software-driven printing workflow.
