@@ -99,7 +99,7 @@ These tools enabled controlled, repeatable experiments and supported analysis of
        alt="Experimental setup for liquid metal strain characterization"
        style="max-width: 500px; display: block; margin: 0 auto;">
   <figcaption style="max-width: 500px; margin: 0 auto;">
-    Experimental setup used for automated force–displacement testing and electrical measurement of printed liquid metal strain elements.
+    Experimental setup for characterizing liquid metal strain sensors using a range of test objects with different geometries and surface features.
   </figcaption>
 </figure>
 
