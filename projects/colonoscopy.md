@@ -14,8 +14,8 @@ My contributions focused on control software, sensing integration, and operator 
 <figure class="align-center">
   <img src="/assets/images/colon_setup.png"
        alt="Experimental colonoscopy robot setup"
-       style="max-width: 900px; display: block; margin: 0 auto;">
-  <figcaption style="max-width: 900px; margin: 0 auto;">
+       style="max-width: 800px; display: block; margin: 0 auto;">
+  <figcaption style="max-width: 800px; margin: 0 auto;">
     <strong>Fig. 10.</strong> Experimental setup used for performing the case study, including:
     ① CH gripping mechanism on a rotary stand,
     ② passive rotary stand,
