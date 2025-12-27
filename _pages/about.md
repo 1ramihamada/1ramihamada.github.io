@@ -9,4 +9,4 @@ I currently work as an undergraduate research assistant in the Advanced Robotic 
 
 I am interested in sensing systems, particularly the design and fabrication of novel sensors and their integration into robotic or embedded platforms.
 
-This site is a collection of projects that reflect the types of problems I have worked on and the tools I use to solve them.
+This site is a collection of projects that reflect the types of problems I have worked on and the tools I used to solve them.
