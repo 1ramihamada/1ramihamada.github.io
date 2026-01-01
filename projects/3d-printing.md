@@ -48,11 +48,11 @@ The interface provides four core functions:
        style="max-width: 1000px; display: block; margin: 0 auto;">
 </figure>
 
-## Custom Firmware Modifications
-I modified the stock Prusa firmware to support the non-standard hardware and thermal behavior required for liquid metal printing. Because gallium solidifies near room temperature and becomes unstable if overheated, the printer’s default assumptions for thermoplastic extrusion had to be adjusted.
+## Custom Firmware Modifications (Prusa firmware, C/C++)
+I modified Prusa firmware to support syringe-based liquid metal extrusion and an external heater. Gallium operates in a narrow temperature window, so the printer’s default thermoplastic assumptions led to false faults and unstable deposition until the control and safety behavior were adjusted.
 
-- **Thermal Handling:** Firmware temperature limits and safety checks were modified to support an external heating element on the syringe body without triggering fault conditions.
-- **Kinematic Tuning:** Acceleration and jerk parameters were reduced to account for the added mass of the syringe assembly, minimizing vibrations that caused trace breakage.
+- **Thermal Saftey Behavior:** Updated temperature limits and fault checks so an external heater could be used without triggering temperature errors, while keeping safety protections intact.
+- **Kinematic Tuning:** Reduced acceleration/jerk limits to account for the heavier syringe toolhead and cut down vibration that caused trace breakage during fast moves.
 - **Sensor Calibration:** Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified extruder geometry.
 
 ## Calibration and Path Optimization
