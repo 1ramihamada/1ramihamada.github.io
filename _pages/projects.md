@@ -5,7 +5,7 @@ author_profile: true
 ---
 
 ### [Liquid Metal 3D Printer](/projects/3d-printing/)
-3D printing platform for precision fabrication of stretchable strain sensors
+Control software for gallium-based sensor fabrication
 
 ---
 
