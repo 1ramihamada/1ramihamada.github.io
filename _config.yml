@@ -59,7 +59,7 @@ plugins:
 author:
   name   : "Rami Hamada"
   avatar : "/assets/images/headshot.jpg"
-  bio    : "Electrical and Computer Engineering at UT Austin"
+  bio    : "ECE @ UT Austin"
   links:
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin-in"
