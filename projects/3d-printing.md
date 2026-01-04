@@ -7,7 +7,7 @@ classes: wide
 ---
 
 ## Overview
-This project focused on building the software and control infrastructure needed to fabricate stretchable, liquid metal strain sensors using a modified 3D printing platform.
+I built the software and control infrastructure for a modified 3D printer that fabricates stretchable, liquid metal strain sensors.
 
 While the mechanical modifications to the printer were handled separately, I was responsible for the entire software stack. This included the ROS2 control architecture, printer–dispenser coordination, GUI development, firmware modifications, and calibration tools for repeatable liquid metal deposition.
 
@@ -17,12 +17,25 @@ While the mechanical modifications to the printer were handled separately, I was
        style="max-width: 900px; display: block; margin: 0 auto;">
 </figure>
 
+## Sensor Fabrication Workflow
+The system enables a layered fabrication process for stretchable strain sensors without requiring a dedicated mold for each geometry.
+
+Liquid silicone is poured into a base mold and flattened using a lid press. After curing, gallium is printed directly onto the silicone, solidified in a freezer, and encapsulated with a second silicone layer to complete the sensor.
+
+This approach replaces an earlier mold-based injection method that was slow and difficult to scale to complex designs. Direct printing enables faster iteration, lower cost, and fabrication of complex sensor geometries without custom tooling.
+
+<figure class="align-center">
+  <img src="/assets/images/completed_sensor.png"
+       alt="Completed liquid metal sensor"
+       style="max-width: 500px; display: block; margin: 0 auto;">
+</figure>
+
 ## System Architecture
 I designed the control system around ROS2 to separate printer motion, pneumatic control, and user interaction into independent nodes. This decoupling keeps the printer’s G-code stream fast and stable while allowing real-time adjustment of extrusion parameters.
 
-- **Printer Node:** Streams G-code to the Prusa i3 MK3S+ and handles motion execution and mold-aligned coordinate transforms. It also issues start/stop triggers to synchronize extrusion with movement.
-- **Dispenser Node:** Converts ROS commands into serial messages for the Nordson Ultimus V air dispenser, using a dedicated worker loop to minimize pressure timing jitter.
-- **GUI Node:** Provides real-time control for jogging, registration, and parameter tuning without interrupting the printer’s serial buffer.
+- **Printer Node:** Streams G-code to the Prusa i3 MK3S+ and handles coordinate transforms for mold alignment. A dedicated reader thread queues all serial input so writes stay non-blocking and the motion buffer never stalls. Position queries use a ROS service for synchronous reads during registration.
+- **Dispenser Node:** Implements the Nordson Ultimus V serial protocol, including STX/ETX framing, checksum calculation, and ENQ/ACK handshaking. Commands go through a worker thread with debouncing to prevent duplicate toggles when the GUI sends rapid start/stop calls.
+- **GUI Node:** Provides real-time control for jogging, registration, and parameter tuning without interrupting the printer’s serial buffer. An emergency stop button publishes to a shared topic that both nodes subscribe to, triggering M112 on the printer and immediate shutoff on the dispenser.
 
 <figure class="align-center">
   <img src="/assets/images/ros_diagram.png"
@@ -38,9 +51,9 @@ I developed a wxPython-based GUI that serves as the control layer for the ROS2 s
 
 The interface provides four core functions:
 - **Manual Control:** Jogging axes, homing, and sending raw G-code, with dedicated controls to prime and clear the Nordson dispenser.
-- **Coordinate Registration:** Recording reference points on a substrate and computing a transform to align print paths with custom molds.
+- **Coordinate Registration:** Recording reference points on a substrate and computing a transform to align print paths with custom molds. Registration profiles can be saved and loaded as JSON, so switching between mold geometries doesn't require re-registration.
 - **Live Parameter Tuning:** Adjusting extrusion pressure, vacuum retract, and temperature settings mid-print to compensate for material behavior.
-- **Path Visualization:** A 3D preview of the loaded G-code to verify print paths and coordinate offsets before execution.
+- **Path Visualization:** A 3D matplotlib plot showing raw G-code paths alongside transformed output, used to verify alignment before printing.
 
 <figure class="align-center">
   <img src="/assets/images/gui.png" 
@@ -51,51 +64,32 @@ The interface provides four core functions:
 ## Custom Firmware Modifications (Prusa firmware, C/C++)
 I modified Prusa firmware to support syringe-based liquid metal extrusion and an external heater. Gallium operates in a narrow temperature window, so the printer’s default thermoplastic assumptions led to false faults and unstable deposition until the control and safety behavior were adjusted.
 
-- **Thermal Saftey Behavior:** Updated temperature limits and fault checks so an external heater could be used without triggering temperature errors, while keeping safety protections intact.
+- **Thermal Safety Behavior:** Updated temperature limits and fault checks so an external heater could be used without triggering temperature errors, while keeping safety protections intact.
 - **Kinematic Tuning:** Reduced acceleration/jerk limits to account for the heavier syringe toolhead and cut down vibration that caused trace breakage during fast moves.
-- **Sensor Calibration:** Thermistor tables and motion limits were updated to reflect the custom heating hardware and modified extruder geometry.
+- **Thermistor Calibration:** Updated thermistor lookup tables to match the external heater's response curve, so temperature readings stayed accurate outside the stock operating range.
 
 ## Calibration and Path Optimization
 To achieve repeatable deposition, I calibrated the interaction between printer motion and pneumatic extrusion. Gallium’s material properties make deposition highly sensitive to mismatches between speed, pressure, and timing.
 
-- **Pressure–Speed Matching:** Spiral test patterns were used to tune extrusion pressure against feed rate, preventing pooling at corners and discontinuities along straight paths.
-- **Z-Height Calibration:** A stepped calibration block was used to determine the nozzle offset that maintains a continuous material bridge without dragging or beading.
-- **Start/Stop Timing:** G-code trigger timing and vacuum retract settings were tuned to compensate for pneumatic latency, eliminating tails and blobs at trace endpoints.
+- **Pressure–Speed Matching:** I used spiral test patterns to tune extrusion pressure against feed rate, preventing pooling at corners and discontinuities along straight paths.
+- **Z-Height Calibration:** I used a stepped calibration block to find the nozzle offset that maintains a continuous material bridge without dragging or beading.
+- **Start/Stop Timing:** I tuned G-code trigger timing and vacuum retract settings to compensate for pneumatic latency, eliminating tails and blobs at trace endpoints.
+
+For multi-layer prints, the toolpath alternates direction each layer to avoid repositioning jumps and keep deposition continuous.
 
 <figure class="align-center">
   <img src="/assets/images/sensor_samples.png"
        alt="Liquid metal pressure sweep test"
        style="max-width: 600px; display: block; margin: 0 auto;">
   <figcaption style="max-width: 600px; margin: 0 auto;">
-    Pressure sweep showing six gallium prints deposited at a fixed feed rate (12000) and Z height (15 mm).
+    Pressure sweep showing six gallium prints deposited at a fixed feed rate (12000 mm/min) and Z height (15 mm).
     Pressure was increased from 1.2 bar to 1.7 bar in 0.1 bar increments to evaluate trace continuity and pooling behavior.
   </figcaption>
 </figure>
 
-## Sensor Fabrication Workflow
-With repeatable liquid metal deposition established, the system enabled a layered fabrication process for stretchable strain sensors without requiring a dedicated mold for each geometry.
+## Sensor Characterization
 
-Liquid silicone was poured into a base mold and flattened using a lid press. After curing, gallium was printed directly onto the silicone, solidified in a freezer, and encapsulated with a second silicone layer to complete the sensor.
-
-This approach replaces an earlier mold-based injection method that was slow and difficult to scale to complex designs. Direct printing enables faster iteration, lower cost, and fabrication of complex sensor geometries without custom tooling.
-
-<figure class="align-center">
-  <img src="/assets/images/completed_sensor.png"
-       alt="Completed liquid metal sensor"
-       style="max-width: 500px; display: block; margin: 0 auto;">
-</figure>
-
-## Experimental Testing & Data Collection
-I designed and implemented the software used to automate experimental testing and data collection for liquid metal strain sensor characterization. This included controlling the vertical motion mechanism, synchronizing force measurements, and recording electrical responses during loading and unloading cycles.
-
-I wrote Python code to:
-- Control the vertical actuator using Dynamixel motors
-- Apply repeatable displacement profiles programmatically
-- Read force measurements from a digital force gauge
-- Record voltage and resistance data during experiments
-- Process and interpolate trial data across multiple runs
-
-These tools enabled controlled, repeatable experiments and supported analysis of the relationship between applied force, displacement, and resistance change in the printed liquid metal traces.
+Once fabrication was repeatable, I built the software to characterize sensor performance. Python scripts controlled the Dynamixel-driven test rig, applied repeatable displacement profiles, and logged force and resistance measurements in sync. Post-processing scripts interpolated data across trials to analyze how resistance changed under strain.
 
 <figure class="align-center">
   <img src="/assets/images/experimental_setup.png"
